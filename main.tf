@@ -28,7 +28,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
 # TODO - Move to another repo to avoid deleting images
 resource "azurerm_container_registry" "acr" {
-  name                = "${local.base_name}-acr"
+  name                = "${local.base_name}acr"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   sku                 = "Basic"
