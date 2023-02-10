@@ -2,16 +2,13 @@ name: 'vm_pull_request'
 
 on:
   pull_request:
-    paths:
-      - virtual_machine/**
-      - .github/workflows/vm_pull_request.yml
 
 permissions:
   contents: read
 
 jobs:
-  vm_pull_request:
-    name: 'vm_pull_request'
+  pull_request:
+    name: 'pull_request'
     runs-on: ubuntu-latest
     environment: production
     env:
