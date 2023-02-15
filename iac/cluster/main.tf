@@ -1,27 +1,18 @@
 locals {
-  location  = "westus2"
+  location  = "SFO3"
   base_name = "banicry"
 }
 
-# resource "azurerm_resource_group" "rg" {
-#   name     = "${local.base_name}-rg"
-#   location = local.location
-# }
+resource "digitalocean_kubernetes_cluster" "foo" {
+  name    = "${local.base_name}-aks"
+  region  = local.location
+  version = "1.25.4-do.0"
 
-# resource "azurerm_kubernetes_cluster" "aks" {
-#   name                = "${local.base_name}-aks"
-#   location            = azurerm_resource_group.rg.location
-#   resource_group_name = azurerm_resource_group.rg.name
-#   dns_prefix          = "bani"
-#   sku_tier            = "Free"
-
-#   default_node_pool {
-#     name       = "default"
-#     node_count = 1
-#     vm_size    = "Standard_B2s"
-#   }
-
-#   identity {
-#     type = "SystemAssigned"
-#   }
-# }
+  node_pool {
+    name       = "default-pool"
+    size       = "s-2vcpu-4gb"
+    auto_scale = true
+    min_nodes  = 1
+    max_nodes  = 2
+  }
+}

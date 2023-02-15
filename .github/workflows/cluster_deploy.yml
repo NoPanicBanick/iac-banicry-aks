@@ -21,6 +21,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+      TF_VAR_do_token: ${{ secrets.DIGITAL_OCEAN_TOKEN }}
 
     defaults:
       run:
@@ -28,13 +29,12 @@ jobs:
 
     steps:
     - name: Checkout
-      working-directory: iac/static_resources
       uses: actions/checkout@v3
 
     - name: Terraform Init
-      working-directory: iac/static_resources
+      working-directory: iac/cluster
       run: terraform init
 
     - name: Terraform Apply
-      working-directory: iac/static_resources
+      working-directory: iac/cluster
       run: terraform apply -auto-approve -input=false
