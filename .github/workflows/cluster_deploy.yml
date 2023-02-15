@@ -1,12 +1,12 @@
-name: 'deploy'
+name: 'deploy cluster'
 
 on:
   push:
     branches:
       - main
     paths:
-      - iac/static_resources/**
-      - .github/workflows/static_deploy.yml
+      - iac/cluster/**
+      - .github/workflows/cluster_deploy.yml
 
 permissions:
   contents: read
