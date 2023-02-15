@@ -1,5 +1,5 @@
 locals {
-  location  = "SFO3"
+  location  = "sfo3"
   base_name = "banicry"
 }
 

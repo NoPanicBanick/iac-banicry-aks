@@ -1,4 +1,4 @@
-name: 'static resources deploy'
+name: 'deploy static'
 
 on:
   push:
