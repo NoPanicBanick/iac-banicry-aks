@@ -1,10 +1,10 @@
-name: 'vm_pull_request'
+name: 'static_pull_request'
 
 on:
   pull_request:
     paths:
         - iac/static_resources/**
-        - .github/workflows/static_deploy.yml
+        - .github/workflows/static_pull_request.yml
 
 permissions:
   contents: read
