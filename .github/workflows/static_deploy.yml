@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - iac/static_resources/**
+      - .github/workflows/static_deploy.yml
 
 permissions:
   contents: read
@@ -25,10 +28,13 @@ jobs:
 
     steps:
     - name: Checkout
+      working-directory: iac/static_resources
       uses: actions/checkout@v3
 
     - name: Terraform Init
+      working-directory: iac/static_resources
       run: terraform init
 
     - name: Terraform Apply
+      working-directory: iac/static_resources
       run: terraform apply -auto-approve -input=false
