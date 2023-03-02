@@ -46,7 +46,7 @@ resource "kubernetes_secret" "backup-acct-secret" {
 
   data = {
     azurestorageaccountname = azurerm_storage_account.backups.name
-    azurestorageaccountkey = azurerm_storage_account.backups.primary_access_key
+    azurestorageaccountkey  = azurerm_storage_account.backups.primary_access_key
   }
 }
 
