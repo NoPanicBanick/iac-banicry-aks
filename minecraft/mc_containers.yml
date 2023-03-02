@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minecraft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft
+  template:
+    metadata:
+      labels:
+        app: minecraft
+    spec:
+      containers:
+      - name: mc-backup
+        image: itzg/mc-backup
+        env:
+        - name: RCON_HOST
+          value: "vault-hunters-rcon.default.svc.cluster.local"
+        - name: TZ
+          value: "UTC"
+        volumeMounts:
+        - mountPath: "/data"
+          name: worlddata
+        - mountPath: "/backups"
+          name: backups
+      - name: minecraft
+        image: itzg/minecraft-server
+        ports:
+        - containerPort: 25565
+        - containerPort: 25575
+        resources: 
+          requests:
+            memory: "10240Mi"
+            cpu: "6"
+        env:
+        - name: VERSION
+          value: 1.18.2
+        - name: EULA
+          value: 'TRUE'
+        - name: TYPE
+          value: AUTO_CURSEFORGE
+        - name: CF_SLUG
+          value: vault-hunters-1-18-2
+        - name: INIT_MEMORY
+          value: 4G
+        - name: MAX_MEMORY
+          value: 10G
+        - name: DIFFICULTY
+          value: easy
+        - name: ENFORCE_WHITELIST
+          value: 'true'
+        - name: WHITELIST
+          value: bubba95x,doublelobster,quietfork,Dissonant_Nova,Femboi101
+        - name: OPS
+          value: bubba95x
+        - name: ALLOW_FLIGHT
+          value: 'TRUE'
+        - name: SERVER_NAME
+          value: 'VAULT_HUNTERS'
+        - name: ONLINE_MODE
+          value: 'TRUE'
+        - name: MOTD
+          value: 'Doin lines of cocaine off a hookers crusty asshole.'
+        - name: OVERRIDE_ICON
+          value: 'TRUE'
+        - name: ICON
+          value: "https://images.squarespace-cdn.com/content/v1/58b88eaae58c62610655830e/1489115202943-UC7AFR5SUIADCZUZ5R1M/grumiomum7.jpg"
+        volumeMounts:
+        - mountPath: "/data"
+          name: worlddata
+      volumes:
+      - name: backups
+        csi:
+          driver: file.csi.azure.com
+          readOnly: false
+          volumeAttributes:
+            secretName: backups-acct
+            shareName: backups
+      - name: worlddata
+        persistentVolumeClaim:
+          claimName: worlddata-minecraft-0 
+          readOnly: true
+  volumeClaimTemplates:
+  - metadata:
+      name: worlddata
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: do-block-storage
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault-hunters-lb
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 25565
+      targetPort: 25565
+  selector:
+    app: minecraft
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault-hunters-rcon
+spec:
+  ports:
+    - port: 25575
+      targetPort: 25575
+  selector:
+    app: minecraft
