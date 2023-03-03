@@ -28,6 +28,8 @@ jobs:
       uses: digitalocean/action-doctl@v2
       with:
         token: ${{ secrets.DIGITAL_OCEAN_TOKEN }}
+    - name: K8s Sign In
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 banicry-aks
     - name: kubectl apply
       run: kubectl apply -f mc_containers.yml
       working-directory: minecraft
