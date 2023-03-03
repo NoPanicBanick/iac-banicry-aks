@@ -1,0 +1,33 @@
+name: 'mc_containers_kubectl'
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+        - minecraft/**
+        - .github/workflows/mc_containers_deploy.yml
+
+permissions:
+  contents: read
+
+jobs:
+  pull_request:
+    name: 'pull_request'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      TF_VAR_do_token: ${{ secrets.DIGITAL_OCEAN_TOKEN }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3  
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITAL_OCEAN_TOKEN }}
+    - name: kubectl apply
+      run: kubectl apply -f mc_containers.yml
+      working-directory: minecraft
