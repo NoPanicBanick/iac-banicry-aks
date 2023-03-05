@@ -1,19 +1,17 @@
-name: 'mc_kubectl_deploy'
+name: 'mc_kubectl_dryrun'
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
     paths:
         - minecraft/**
-        - .github/workflows/mc_containers_deploy.yml
+        - .github/workflows/mc_containers_pr.yml
 
 permissions:
   contents: read
 
 jobs:
-  deploy:
-    name: 'deploy'
+  pull_request:
+    name: 'pull_request'
     runs-on: ubuntu-latest
     environment: production
     env:
@@ -31,5 +29,5 @@ jobs:
     - name: K8s Sign In
       run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 banicry-aks
     - name: kubectl apply
-      run: kubectl apply -f mc_containers.yml
+      run: kubectl apply --dry-run=server -f mc_containers.yml
       working-directory: minecraft
