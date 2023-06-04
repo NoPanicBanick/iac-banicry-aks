@@ -3,9 +3,9 @@ name: 'deploy cluster'
 on:
   push:
     branches: [ "main" ]
-    paths:
-      - iac/cluster/**
-      - .github/workflows/cluster_deploy.yml
+    # paths:
+    #   - iac/cluster/**
+    #   - .github/workflows/cluster_deploy.yml
 
 permissions:
   contents: read
