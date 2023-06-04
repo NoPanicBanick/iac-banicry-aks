@@ -2,6 +2,8 @@ name: 'cluster_pull_request'
 
 on:
   pull_request:
+    branches:
+        - main
     paths:
         - iac/cluster/**
         - .github/workflows/cluster_pull_request.yml
