@@ -2,8 +2,7 @@ name: 'deploy cluster'
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
     paths:
       - iac/cluster/**
       - .github/workflows/cluster_deploy.yml
